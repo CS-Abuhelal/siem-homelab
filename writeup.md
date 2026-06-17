@@ -26,6 +26,9 @@ During the monitoring period, the deployment surfaced one **Critical-severity vu
 | Agent Status | Active, reporting on default group |
 | Modules Enabled | Threat Hunting, File Integrity Monitoring (FIM), Configuration Assessment (SCA), MITRE ATT&CK mapping, Vulnerability Detection |
 
+![Wazuh endpoint dashboard for ahmed-pc showing MITRE ATT&CK, Compliance, Vulnerability Detection, and SCA summaries](screenshots/dashboard-overview.png)
+*Figure 1 — Wazuh endpoint summary dashboard for `ahmed-pc`, showing system inventory, MITRE ATT&CK top tactics, compliance, vulnerability detection, and SCA results.*
+
 **Deployment notes:**
 - The Wazuh manager was deployed from the official OVA image and imported directly into VirtualBox to minimize manual server configuration and focus on agent onboarding and detection tuning.
 - The Windows 11 endpoint (`ahmed-pc`) was registered as an agent and connected to `node01` over the internal lab network, with the Wazuh dashboard accessed via `https://192.168.0.190`.
@@ -48,6 +51,9 @@ During the monitoring period, the deployment surfaced one **Critical-severity vu
 
 The Vulnerability Detection dashboard identified one Critical-severity finding on the endpoint, attributed to the installed Node.js package. Given the CVSS 9.1 rating, this vulnerability carries a high likelihood of remote exploitation with significant impact to confidentiality, integrity, and/or availability if left unpatched. Additional lower-severity findings were also observed across the endpoint's software inventory (17 High, 15 Medium, 2 Low), with Node.js, Steam, MongoDB, Python, and ChatGPT-related packages appearing among the top affected components.
 
+![Vulnerability Detection dashboard filtered to Critical severity, showing CVE-2025-55130 on ahmed-pc affecting Node.js with a base score of 9.1](screenshots/vulnerability-detection-cve-2025-55130.png)
+*Figure 2 — Vulnerability Detection dashboard filtered to Critical severity, confirming CVE-2025-55130 (CVSS 9.1) on `ahmed-pc`, affecting the Node.js package.*
+
 ### 3.2 MITRE ATT&CK — T1562.001 (Defense Evasion: Disable or Modify Tools)
 
 | Field | Value |
@@ -59,6 +65,9 @@ The Vulnerability Detection dashboard identified one Critical-severity finding o
 | Top Rule ID Observed | 60642 — "Software protection service scheduled successfully" |
 
 The dashboard's MITRE ATT&CK module flagged **489 events** correlating to T1562.001, indicating repeated activity consistent with security tooling or protection services being scheduled, modified, or interacted with on the endpoint. While the majority of these events traced back to a low-severity rule (level 3) tied to scheduled software protection service execution, the volume and consistency of the activity warranted classification under this Defense Evasion technique and is flagged here for analyst review and baseline tuning.
+
+![MITRE ATT&CK T1562.001 technique detail pane showing 489 hits over the last 24 hours, including CIS benchmark and software protection service events](screenshots/mitre-attack-t1562-001.png)
+*Figure 3 — T1562.001 (Disable or Modify Tools) technique detail, showing 489 hits over the last 24 hours.*
 
 ### 3.3 CIS Benchmark Compliance — 25% Pass Rate
 
